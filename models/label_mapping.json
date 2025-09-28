@@ -1,0 +1,17 @@
+{
+    "0": "benign",
+    "1": "bot",
+    "2": "ddos",
+    "3": "dos goldeneye",
+    "4": "dos hulk",
+    "5": "dos slowhttptest",
+    "6": "dos slowloris",
+    "7": "ftp-patator",
+    "8": "heartbleed",
+    "9": "infiltration",
+    "10": "portscan",
+    "11": "ssh-patator",
+    "12": "web attack \u0096 brute force",
+    "13": "web attack \u0096 sql injection",
+    "14": "web attack \u0096 xss"
+}
