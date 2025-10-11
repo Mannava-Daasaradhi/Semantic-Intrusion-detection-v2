@@ -1,0 +1,48 @@
+--- Starting Phase 6: Evidence-Based Explanation for All Attack Types ---
+Loading data, model, and preparing features...
+Found 14 unique attack types to explain.
+
+Initializing local LLM (gpt2-medium)...
+LLM initialized.
+
+--- Explaining: BOT ---
+An initial 'fwd_latency' was observed, which had a high'main_network_time_diff' and caused the traffic to 'jump'. During the attack, some users were experiencing very high traffic spikes.
+
+--- Explaining: DDOS ---
+A DNS poisoning attack occurred, which was a result of an unexpected port forward from the malicious source. A large chunk of the incoming traffic was redirected to 173.195.10.49; thus, the malicious source blocked other local systems that might have originated from that IP address.
+
+--- Explaining: DOS GOLDENEYE ---
+A "DoS" attack was detected in the network after multiple connections went dead between a maliciously designed server and your application.
+
+--- Explaining: DOS HULK ---
+A network denial of service (DoS) attack was flagged due to a large forward inter-arrival time and an abnormally large amount of free TCP packets.
+
+--- Explaining: DOS SLOWHTTPTEST ---
+An 'DoS Slowhttptest' attack was flagged because of a large delay or the use of a very wide bandwidth. An attacker attempting to connect to this IP may have been able to significantly increase their time until full connection was obtained, but the outcome could remain a net loss. You will receive your summary in two separate alerts after your review completes
+
+--- Explaining: DOS SLOWLORIS ---
+A 'Denial of Service' was initiated by a large quantity of connection traffic resulting in a connection being dropped from the host's internal networks. The attack occurred on October 18, 2016. This type of DDoS is usually only observed in certain regions and is not as dangerous as DDoS attacks used to be.
+
+--- Explaining: FTP-PATATOR ---
+In-bound traffic had reached the attacker's destination network without any warning, indicating some large-scale buffer overflow.
+
+--- Explaining: HEARTBLEED ---
+The server will attempt to connect by sending 200 bytes of traffic to the destination through the gateway. Since the gateway can no longer reach out through the gateway, the server will respond to the request by starting a connection.
+
+--- Explaining: INFILTRATION ---
+An intrusion attempt was made on the target site using a malicious client.
+
+--- Explaining: PORTSCAN ---
+A successful sniff found a TCP/UDP connection, initiated by the adversary, that is actively connecting to a client computer.
+
+--- Explaining: SSH-PATATOR ---
+The exploit was triggered to reach the following ports: 41601, 47435, 47436, 46405, 46402 (SSH) and 46403 (ssh). The flow_id.1 will reach the vulnerable victim machine in 80k+ TCP/IP packets. An impact scan will be triggered to address possible remote code execution on
+
+--- Explaining: WEB ATTACK  BRUTE FORCE ---
+The network did not provide sufficient bandwidth, leading to a full length brute force attack. This is an indicator of that server may have been attempting to block traffic to a remote client, which may have been the intended target of malware.
+
+--- Explaining: WEB ATTACK  SQL INJECTION ---
+An 'HTTPSQL injection' variant of an'sql injection' attack was triggered because of a large number of 'unexpected' entries into a DNS cache, which resulted in a high number of requests from the client.
+
+--- Explaining: WEB ATTACK  XSS ---
+This alert can be used to alert anyone who visits the same IP address as the current user in the network.
