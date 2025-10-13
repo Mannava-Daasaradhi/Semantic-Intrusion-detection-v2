@@ -1,0 +1,52 @@
+{
+  "BENIGN": {
+    "tactic": "Benign",
+    "technique_id": "N/A",
+    "description": "Normal, non-malicious traffic."
+  },
+  "PortScan": {
+    "tactic": "Reconnaissance",
+    "technique_id": "T1046",
+    "description": "Port Scan"
+  },
+  "FTP-Patator": {
+    "tactic": "Credential Access",
+    "technique_id": "T1110.001",
+    "description": "Brute Force: Password Guessing"
+  },
+  "SSH-Patator": {
+    "tactic": "Credential Access",
+    "technique_id": "T1110.001",
+    "description": "Brute Force: Password Guessing"
+  },
+  "Web Attack - Brute Force": {
+    "tactic": "Credential Access",
+    "technique_id": "T1110.001",
+    "description": "Brute Force: Password Guessing"
+  },
+  "Web Attack - XSS": {
+    "tactic": "Execution",
+    "technique_id": "T1059",
+    "description": "Command and Scripting Interpreter"
+  },
+  "Web Attack - Sql Injection": {
+    "tactic": "Execution",
+    "technique_id": "T1059",
+    "description": "Command and Scripting Interpreter"
+  },
+  "Infilteration": {
+    "tactic": "Initial Access",
+    "technique_id": "T1189",
+    "description": "Drive-by Compromise"
+  },
+  "DoS": {
+    "tactic": "Impact",
+    "technique_id": "T1498",
+    "description": "Network Denial of Service"
+  },
+  "DDoS": {
+    "tactic": "Impact",
+    "technique_id": "T1498",
+    "description": "Network Denial of Service"
+  }
+}
