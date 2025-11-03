@@ -1,7 +1,9 @@
 # src/layer_3_knowledge_and_ontology/run_knowledge_graph_and_reasoning.py
+# (MODIFIED to fix the 'KeyError: Label' bug)
 import pandas as pd
 import os
 import json
+import argparse
 
 def apply_ontology_mapping(df, ontology):
     """
@@ -9,21 +11,33 @@ def apply_ontology_mapping(df, ontology):
     based on the 'label' column.
     """
     print("Applying security ontology mapping...")
+    
+    try:
+        with open('models/label_mapping_unsw.json', 'r') as f:
+            label_mapping = json.load(f)
+        label_mapping = {int(k): v for k, v in label_mapping.items()}
+    except FileNotFoundError:
+        print("Error: 'models/label_mapping_unsw.json' not found.")
+        print("Please run Phase 1 script first to generate this file.")
+        return None
 
-    # Create a mapping dictionary from the ontology for faster lookups
-    # This handles partial matches for labels like 'DoS GoldenEye', 'DDoS', etc.
+    # --- THIS IS THE FIX ---
+    # The 'Label' column was converted to 'label' by the line in run_reasoning_engine
+    # We must use the lowercase 'label' here.
+    df['label_text'] = df['label'].map(label_mapping)
+    # -----------------------
+    
+    df['label_text'] = df['label_text'].fillna('Normal')
+
     label_to_tactic = {}
     for key, value in ontology.items():
         tactic_info = f"{value['tactic']}: {value['description']} ({value['technique_id']})"
         label_to_tactic[key] = tactic_info
 
-    # Initialize the new feature column
     df['attack_tactic'] = 'Not Applicable'
 
-    # Iterate through the ontology keys to apply mappings
     for label_key, tactic_value in label_to_tactic.items():
-        # Use str.contains for partial matching (e.g., 'DoS' matches 'DoS Hulk')
-        mask = df['label'].str.contains(label_key, case=False, na=False)
+        mask = df['label_text'].str.contains(label_key, case=False, na=False)
         df.loc[mask, 'attack_tactic'] = tactic_value
 
     identified_count = len(df[df['attack_tactic'] != 'Not Applicable'])
@@ -31,18 +45,14 @@ def apply_ontology_mapping(df, ontology):
 
     return df
 
-def run_reasoning_engine():
+def run_reasoning_engine(input_file, output_file):
     """
     Implements Phase 3: Applies a knowledge-based reasoning engine to
     enrich the data with inferred threat intelligence (attack tactics).
-    MODIFIED: Reads from a dedicated ontology file.
     """
     print("--- Starting Phase 3: Knowledge Graph and Reasoning Engine ---")
 
-    # --- Configuration ---
-    input_file = 'data/processed/model_ready_semantic_data.csv'
-    output_file = 'data/processed/reasoning_enriched_data.csv'
-    ontology_file = 'src/layer_3_knowledge_and_ontology/attack_ontology.json' # <-- NEW
+    ontology_file = 'src/layer_3_knowledge_and_ontology/attack_ontology.json'
 
     if not os.path.exists(input_file):
         print(f"Error: Input file '{input_file}' not found.")
@@ -51,7 +61,6 @@ def run_reasoning_engine():
         print(f"Error: Ontology file '{ontology_file}' not found.")
         return
 
-    # --- 1. Load Data and Ontology ---
     print(f"Loading data from '{input_file}'...")
     df = pd.read_csv(input_file, low_memory=False)
 
@@ -59,13 +68,13 @@ def run_reasoning_engine():
     with open(ontology_file, 'r') as f:
         attack_ontology = json.load(f)
 
-    # --- 2. Standardize Column Names ---
+    # This line converts 'Label' to 'label'
     df.columns = [col.strip().lower().replace(' ', '_') for col in df.columns]
 
-    # --- 3. Apply Ontology Mapping ---
     df_enriched = apply_ontology_mapping(df, attack_ontology)
+    if df_enriched is None:
+        return
 
-    # --- 4. Save Enriched Data ---
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     df_enriched.to_csv(output_file, index=False)
 
@@ -74,4 +83,9 @@ def run_reasoning_engine():
 
 
 if __name__ == "__main__":
-    run_reasoning_engine()
+    parser = argparse.ArgumentParser(description="Phase 3: Knowledge Graph and Reasoning Engine")
+    parser.add_argument('--input', type=str, required=True, help="Path to the input processed CSV file (from Phase 1).")
+    parser.add_argument('--output', type=str, required=True, help="Path to save the output enriched CSV file.")
+    args = parser.parse_args()
+
+    run_reasoning_engine(args.input, args.output)
